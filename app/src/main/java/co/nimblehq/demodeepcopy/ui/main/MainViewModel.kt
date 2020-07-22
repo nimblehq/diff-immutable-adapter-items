@@ -14,10 +14,10 @@ class MainViewModel : ViewModel() {
     }
 
     fun addRandomMessage() {
-        val random = Random.nextInt(20)
-        val randomMessage = (0..random)
-            .map { ('a'..'z').toList()[Random(System.nanoTime()).nextInt(0, 25)].toString() }
-            .reduce { acc, c -> acc + c }
+        val randomMessage =
+            randomLength
+                .map { takeARandomCharacter() }
+                .reduce { acc, c -> acc + c }
 
         val randomUiModel = MessageUiModel(Date().time.toInt(), randomMessage, false)
         val updatedList = messageUiModels.value?.toMutableList()
@@ -36,4 +36,9 @@ class MainViewModel : ViewModel() {
         MessageUiModel(2, "hello world", false),
         MessageUiModel(3, "how are you doing?", false)
     )
+
+    private fun takeARandomCharacter() =
+        ('a'..'z').toList()[Random(System.nanoTime()).nextInt(0, 25)].toString()
+
+    private val randomLength = (0..Random.nextInt(20))
 }
