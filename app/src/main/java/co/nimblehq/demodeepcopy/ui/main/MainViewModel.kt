@@ -37,7 +37,7 @@ class MainViewModel : ViewModel() {
     )
 
     private fun IntRange.takeSomeRandomCharacters() =
-        this.map { ('a'..'z').toList()[Random(System.nanoTime()).nextInt(0, 25)].toString() }
+        this.map { (('a'..'z') + ('A'..'Z')).toList()[Random(System.nanoTime()).nextInt(0, 50)].toString() }
 
     private val aRandomLength = (0..Random.nextInt(20))
 
