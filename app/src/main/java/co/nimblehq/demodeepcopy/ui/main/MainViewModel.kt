@@ -14,19 +14,18 @@ class MainViewModel : ViewModel() {
     }
 
     fun addRandomMessage() {
-        val randomMessage =
-            randomLength
-                .map { takeARandomCharacter() }
-                .reduce { acc, c -> acc + c }
+        val randomMessageUiModel = aRandomLength
+            .takeSomeRandomCharacters()
+            .combineTogether()
+            .generateUiModel()
 
-        val randomUiModel = MessageUiModel(Date().time.toInt(), randomMessage, false)
         val updatedList = messageUiModels.value?.map { it.copy() }?.toMutableList()
         requireNotNull(updatedList)
 
         updatedList.forEach {
             it.hasSeen = true
         }
-        updatedList.add(randomUiModel)
+        updatedList.add(randomMessageUiModel)
 
         messageUiModels.value = updatedList
     }
@@ -37,8 +36,12 @@ class MainViewModel : ViewModel() {
         MessageUiModel(3, "how are you doing?", false)
     )
 
-    private fun takeARandomCharacter() =
-        ('a'..'z').toList()[Random(System.nanoTime()).nextInt(0, 25)].toString()
+    private fun IntRange.takeSomeRandomCharacters() =
+        this.map { ('a'..'z').toList()[Random(System.nanoTime()).nextInt(0, 25)].toString() }
 
-    private val randomLength = (0..Random.nextInt(20))
+    private val aRandomLength = (0..Random.nextInt(20))
+
+    private fun List<String>.combineTogether(): String = this.reduce { acc, c -> acc + c }
+
+    private fun String.generateUiModel() = MessageUiModel(Date().time.toInt(), this, false)
 }
