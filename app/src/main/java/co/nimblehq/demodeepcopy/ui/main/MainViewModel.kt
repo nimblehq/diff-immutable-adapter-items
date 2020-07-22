@@ -20,7 +20,7 @@ class MainViewModel : ViewModel() {
                 .reduce { acc, c -> acc + c }
 
         val randomUiModel = MessageUiModel(Date().time.toInt(), randomMessage, false)
-        val updatedList = messageUiModels.value?.toMutableList()
+        val updatedList = messageUiModels.value?.map { it.copy() }?.toMutableList()
         requireNotNull(updatedList)
 
         updatedList.forEach {
